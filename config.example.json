@@ -1,0 +1,7 @@
+{
+    "discord_bot_token": "",
+    "telegram_bot_token": "",
+    "telegram_chat_id": 0,
+    "discord_channel_id": "",
+    "telegram_timeout": 60
+}
