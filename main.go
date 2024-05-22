@@ -53,31 +53,7 @@ func main() {
 	}
 
 	dg.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
-		if m.Author.Bot {
-			return
-		}
-		if m.ChannelID == config.DiscordChannelID {
-			log.Printf("Got new Discord message: %v", m.Content)
-
-			if m.Attachments != nil {
-				for _, attachment := range m.Attachments {
-					message := util.FormatDiscordMessage(m.Author.Username, m.Content+" "+attachment.URL)
-					tgMsg := tgbotapi.NewMessage(config.TelegramChatID, message)
-					_, err := tgBot.Send(tgMsg)
-					if err != nil {
-						log.Printf("Failed to send attachment to Telegram: %v", err)
-					}
-				}
-			} else {
-				message := util.FormatDiscordMessage(m.Author.Username, m.Content)
-				tgMsg := tgbotapi.NewMessage(config.TelegramChatID, message)
-
-				_, err := tgBot.Send(tgMsg)
-				if err != nil {
-					log.Printf("Failed to send message to Telegram: %v", err)
-				}
-			}
-		}
+		handlers.ListenToMessageCreation(tgBot, config, s, m)
 	})
 
 	u := tgbotapi.NewUpdate(0)
